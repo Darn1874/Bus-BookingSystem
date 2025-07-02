@@ -1,214 +1,207 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Bus Booking System</title>
-    <link rel="stylesheet" href="styles.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Bus Booking System</title>
+  <link rel="stylesheet" href="styles.css" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" />
 </head>
 <body>
-    <!-- Header Section -->
-    <header>
-        <div class="container">
-            <div class="header-content">
-                <a href="#" class="logo" onclick="showPage('home')">BusBooking</a>
-                <nav class="nav-links">
-                    <a href="#" onclick="showPage('home')">Home</a>
-                    <a href="#" onclick="showPage('search')">Search Buses</a>
-                    <a href="#" onclick="showPage('bookings')">My Bookings</a>
-                    <a href="#" onclick="showPage('login')" id="login-link">Login</a>
-                    <a href="#" onclick="showPage('register')" id="register-link">Register</a>
-                    <a href="#" onclick="showPage('admin')" id="admin-link" style="display:none;">Admin</a>
-                    <a href="#" onclick="logout()" id="logout-link" style="display:none;">Logout</a>
-                </nav>
-            </div>
+
+  <!-- Header -->
+  <header>
+    <div class="container header-content">
+      <a href="#" class="logo" onclick="showPage('home')">BusBooking</a>
+      <nav class="nav-links">
+        <a href="#" onclick="showPage('home')">Home</a>
+        <a href="#" onclick="showPage('search')">Search Buses</a>
+        <a href="#" onclick="showPage('bookings')">My Bookings</a>
+        <a href="#" onclick="showPage('login')" id="login-link">Login</a>
+        <a href="#" onclick="showPage('register')" id="register-link">Register</a>
+        <a href="#" onclick="showPage('admin')" id="admin-link" style="display:none;">Admin</a>
+        <a href="#" onclick="logout()" id="logout-link" style="display:none;">Logout</a>
+      </nav>
+    </div>
+  </header>
+
+  <!-- Main Content -->
+  <main class="main-content">
+    <div class="container">
+
+      <!-- Home Page -->
+      <div id="home-page" class="page active">
+        <h1>Welcome to Bus Booking System</h1>
+        <form onsubmit="searchBuses(event)">
+          <div class="form-group">
+            <label for="origin">From</label>
+            <input type="text" id="origin" class="form-control" required />
+          </div>
+          <div class="form-group">
+            <label for="destination">To</label>
+            <input type="text" id="destination" class="form-control" required />
+          </div>
+          <div class="form-group">
+            <label for="date">Date</label>
+            <input type="date" id="date" class="form-control" required />
+          </div>
+          <button type="submit" class="btn">Search Buses</button>
+        </form>
+      </div>
+
+      <!-- Search Results -->
+      <div id="search-results" class="page hidden">
+        <h2>Available Buses</h2>
+        <div id="bus-list" class="bus-list">
+          <!-- Bus cards added by JS -->
         </div>
-    </header>
+      </div>
 
-    <!-- Main Content -->
-    <main class="main-content">
-        <div class="container">
-            <!-- Home Page -->
-            <div id="home-page" class="page">
-                <h1>Welcome to Bus Booking System</h1>
-                <div class="search-form">
-                    <form onsubmit="searchBuses(event)">
-                        <div class="form-group">
-                            <label for="origin">From</label>
-                            <input type="text" id="origin" required>
-                        </div>
-                        <div class="form-group">
-                            <label for="destination">To</label>
-                            <input type="text" id="destination" required>
-                        </div>
-                        <div class="form-group">
-                            <label for="date">Date</label>
-                            <input type="date" id="date" required>
-                        </div>
-                        <button type="submit" class="btn">Search Buses</button>
-                    </form>
-                </div>
-            </div>
-
-            <!-- Search Results Page -->
-            <div id="search-results" class="page hidden">
-                <h2>Available Buses</h2>
-                <div class="bus-list" id="bus-list">
-                    <!-- Bus items will be inserted here by JavaScript -->
-                </div>
-            </div>
-
-            <!-- Booking Page -->
-            <div id="booking-page" class="page hidden">
-                <h2>Book Your Seat</h2>
-                <div class="bus-details" id="bus-details">
-                    <!-- Bus details will be inserted here -->
-                </div>
-                <div class="seat-selection">
-                    <h3>Select Your Seats</h3>
-                    <div class="seat-map" id="seat-map">
-                        <!-- Seats will be inserted here by JavaScript -->
-                    </div>
-                    <div class="booking-summary">
-                        <p>Selected Seats: <span id="selected-seats-count">0</span></p>
-                        <p>Total Amount: $<span id="total-amount">0</span></p>
-                        <button id="proceed-to-payment" class="btn">Proceed to Payment</button>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Payment Page -->
-            <div id="payment-page" class="page hidden">
-                <h2>Payment</h2>
-                <form id="payment-form" onsubmit="processPayment(event)">
-                    <div class="form-group">
-                        <label>Card Number</label>
-                        <input type="text" placeholder="1234 5678 9012 3456" required>
-                    </div>
-                    <div class="form-group">
-                        <label>Expiry Date</label>
-                        <input type="text" placeholder="MM/YY" required>
-                    </div>
-                    <div class="form-group">
-                        <label>CVV</label>
-                        <input type="text" placeholder="123" required>
-                    </div>
-                    <div class="form-group">
-                        <label>Name on Card</label>
-                        <input type="text" placeholder="John Doe" required>
-                    </div>
-                    <div class="payment-summary">
-                        <h3>Order Summary</h3>
-                        <div id="payment-details">
-                            <!-- Payment details will be inserted here -->
-                        </div>
-                    </div>
-                    <button type="submit" class="btn">Confirm Payment</button>
-                </form>
-            </div>
-
-            <!-- Booking Confirmation Page -->
-            <div id="confirmation-page" class="page hidden">
-                <h2>Booking Confirmed!</h2>
-                <div class="ticket" id="ticket">
-                    <!-- Ticket details will be inserted here -->
-                </div>
-            </div>
-
-            <!-- Login Page -->
-            <div id="login-page" class="page hidden">
-                <h2>Login</h2>
-                <form id="login-form" onsubmit="login(event)">
-                    <div class="form-group">
-                        <label>Email</label>
-                        <input type="email" id="login-email" required>
-                    </div>
-                    <div class="form-group">
-                        <label>Password</label>
-                        <input type="password" id="login-password" required>
-                    </div>
-                    <button type="submit" class="btn">Login</button>
-                    <p>Don't have an account? <a href="#" onclick="showPage('register')">Register</a></p>
-                </form>
-            </div>
-
-            <!-- Registration Page -->
-            <div id="register-page" class="page hidden">
-                <h2>Register</h2>
-                <form id="register-form" onsubmit="register(event)">
-                    <div class="form-group">
-                        <label>Full Name</label>
-                        <input type="text" id="register-name" required>
-                    </div>
-                    <div class="form-group">
-                        <label>Email</label>
-                        <input type="email" id="register-email" required>
-                    </div>
-                    <div class="form-group">
-                        <label>Phone Number</label>
-                        <input type="tel" id="register-phone" required>
-                    </div>
-                    <div class="form-group">
-                        <label>Password</label>
-                        <input type="password" id="register-password" required>
-                    </div>
-                    <div class="form-group">
-                        <label>Confirm Password</label>
-                        <input type="password" id="register-confirm-password" required>
-                    </div>
-                    <button type="submit" class="btn">Register</button>
-                    <p>Already have an account? <a href="#" onclick="showPage('login')">Login</a></p>
-                </form>
-            </div>
-
-            <!-- My Bookings Page -->
-            <div id="bookings-page" class="page hidden">
-                <h2>My Bookings</h2>
-                <div class="bookings-list" id="bookings-list">
-                    <!-- Bookings will be inserted here by JavaScript -->
-                </div>
-            </div>
-
-            <!-- Admin Dashboard -->
-            <div id="admin-page" class="page hidden">
-                <h2>Admin Dashboard</h2>
-                <div class="admin-nav">
-                    <button class="admin-tab active" data-tab="buses">Manage Buses</button>
-                    <button class="admin-tab" data-tab="routes">Manage Routes</button>
-                    <button class="admin-tab" data-tab="schedules">Manage Schedules</button>
-                    <button class="admin-tab" data-tab="bookings">View Bookings</button>
-                </div>
-
-                <div id="buses-tab" class="admin-content">
-                    <h3>Buses Management</h3>
-                    <button id="add-bus" class="btn">Add New Bus</button>
-                    <table>
-                        <thead>
-                            <tr>
-                                <th>Bus ID</th>
-                                <th>Registration</th>
-                                <th>Model</th>
-                                <th>Capacity</th>
-                                <th>Actions</th>
-                            </tr>
-                        </thead>
-                        <tbody id="buses-table">
-                            <!-- Buses will be inserted here by JavaScript -->
-                        </tbody>
-                    </table>
-                </div>
-            </div>
+      <!-- Booking Page -->
+      <div id="booking-page" class="page hidden">
+        <h2>Book Your Seat</h2>
+        <div id="bus-details"></div>
+        <div class="seat-selection">
+          <h3>Select Your Seats</h3>
+          <div class="seat-map" id="seat-map"></div>
+          <div class="booking-summary">
+            <p>Selected Seats: <span id="selected-seats-count">0</span></p>
+            <p>Total Amount: $<span id="total-amount">0</span></p>
+            <button id="proceed-to-payment" class="btn">Proceed to Payment</button>
+          </div>
         </div>
-    </main>
+      </div>
 
-    <!-- Footer Section -->
-    <footer>
-        <div class="container">
-            <p>&copy; 2023 Bus Booking System. All rights reserved.</p>
+      <!-- Payment Page -->
+      <div id="payment-page" class="page hidden">
+        <h2>Payment</h2>
+        <form id="payment-form" onsubmit="processPayment(event)">
+          <div class="form-group">
+            <label>Card Number</label>
+            <input type="text" class="form-control" required />
+          </div>
+          <div class="form-group">
+            <label>Expiry Date</label>
+            <input type="text" class="form-control" placeholder="MM/YY" required />
+          </div>
+          <div class="form-group">
+            <label>CVV</label>
+            <input type="text" class="form-control" required />
+          </div>
+          <div class="form-group">
+            <label>Name on Card</label>
+            <input type="text" class="form-control" required />
+          </div>
+          <div class="payment-summary">
+            <h3>Order Summary</h3>
+            <div id="payment-details"></div>
+          </div>
+          <button type="submit" class="btn">Confirm Payment</button>
+        </form>
+      </div>
+
+      <!-- Confirmation Page -->
+      <div id="confirmation-page" class="page hidden">
+        <h2>Booking Confirmed!</h2>
+        <div id="ticket" class="ticket">
+          <!-- Ticket details added by JS -->
         </div>
-    </footer>
+      </div>
 
-    <script src="script.js"></script>
+      <!-- Login Page -->
+      <div id="login-page" class="page hidden">
+        <h2>Login</h2>
+        <form id="login-form" onsubmit="login(event)">
+          <div class="form-group">
+            <label>Email</label>
+            <input type="email" id="login-email" class="form-control" required />
+          </div>
+          <div class="form-group">
+            <label>Password</label>
+            <input type="password" id="login-password" class="form-control" required />
+          </div>
+          <button type="submit" class="btn">Login</button>
+          <p>Don't have an account? <a href="#" onclick="showPage('register')">Register</a></p>
+        </form>
+      </div>
+
+      <!-- Register Page -->
+      <div id="register-page" class="page hidden">
+        <h2>Register</h2>
+        <form id="register-form" onsubmit="register(event)">
+          <div class="form-group">
+            <label>Full Name</label>
+            <input type="text" id="register-name" class="form-control" required />
+          </div>
+          <div class="form-group">
+            <label>Email</label>
+            <input type="email" id="register-email" class="form-control" required />
+          </div>
+          <div class="form-group">
+            <label>Phone Number</label>
+            <input type="tel" id="register-phone" class="form-control" required />
+          </div>
+          <div class="form-group">
+            <label>Password</label>
+            <input type="password" id="register-password" class="form-control" required />
+          </div>
+          <div class="form-group">
+            <label>Confirm Password</label>
+            <input type="password" id="register-confirm-password" class="form-control" required />
+          </div>
+          <button type="submit" class="btn">Register</button>
+          <p>Already have an account? <a href="#" onclick="showPage('login')">Login</a></p>
+        </form>
+      </div>
+
+      <!-- My Bookings -->
+      <div id="bookings-page" class="page hidden">
+        <h2>My Bookings</h2>
+        <div id="bookings-list" class="bookings-list">
+          <!-- Booking history -->
+        </div>
+      </div>
+
+      <!-- Admin Dashboard -->
+      <div id="admin-page" class="page hidden">
+        <h2>Admin Dashboard</h2>
+        <div class="admin-nav">
+          <button class="admin-tab active" data-tab="buses">Manage Buses</button>
+          <button class="admin-tab" data-tab="routes">Manage Routes</button>
+          <button class="admin-tab" data-tab="schedules">Manage Schedules</button>
+          <button class="admin-tab" data-tab="bookings">View Bookings</button>
+        </div>
+
+        <div id="buses-tab" class="admin-content">
+          <h3>Buses Management</h3>
+          <button id="add-bus" class="btn">Add New Bus</button>
+          <table>
+            <thead>
+              <tr>
+                <th>Bus ID</th>
+                <th>Registration</th>
+                <th>Model</th>
+                <th>Capacity</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody id="buses-table">
+              <!-- Admin bus list -->
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+    </div>
+  </main>
+
+  <!-- Footer -->
+  <footer>
+    <div class="container">
+      <p>&copy; 2025 Bus Booking System. All rights reserved.</p>
+    </div>
+  </footer>
+
+  <script src="script.js"></script>
 </body>
 </html>
