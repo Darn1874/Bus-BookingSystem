@@ -62,6 +62,7 @@ header {
 .main-content {
     padding: 2rem 0;
     min-height: calc(100vh - 150px);
+    background: url('bus-bg.jpg') no-repeat center center/cover;
 }
 
 /* Footer */
@@ -79,6 +80,9 @@ footer {
 
 .page.active {
     display: block;
+    background: rgba(255, 255, 255, 0.96);
+    padding: 2rem;
+    border-radius: 8px;
 }
 
 /* Form Styles */
